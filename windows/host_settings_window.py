@@ -1,13 +1,11 @@
 import json
 import os
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem,
-    QGridLayout, QPushButton, QFileDialog, QStyledItemDelegate,
-    QHeaderView, QInputDialog, QLineEdit, QSplitter, QComboBox, QMessageBox
-)
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem,
+                             QGridLayout, QPushButton, QFileDialog, QStyledItemDelegate,
+                             QHeaderView, QInputDialog, QLineEdit, QSplitter, QComboBox, QMessageBox)
 from PyQt5.QtCore import Qt
 from .left_panel.left_panel import LeftPanel
-from .left_panel.user_management import *
+from .left_panel.network_management import SSHThread
 
 class PasswordDelegate(QStyledItemDelegate):
     def displayText(self, text, locale):
@@ -102,10 +100,13 @@ class HostSettingsWindowTab(QWidget):
 
         default_values = [
             "", "Введите название", "", "", "", "",
-            "", "", "false", "false", "false", "false", "false"
+            "", "false", "false", "false", "false"
         ]
         for col, value in enumerate(default_values, start=1):
-            self.hosts_table.setItem(row_position, col, QTableWidgetItem(value))
+            item = QTableWidgetItem(value)
+            if col in [10, 11, 12, 13]:
+                item.setTextAlignment(Qt.AlignCenter)
+            self.hosts_table.setItem(row_position, col, item)
 
     def delete_row(self):
         rows_to_delete = []
@@ -222,3 +223,70 @@ class HostSettingsWindowTab(QWidget):
                 else:
                     self.hosts_table.setRowHidden(row, True)
                     checkbox_item.setCheckState(Qt.Unchecked)
+
+    def run_ssh_thread(self, command, host, key_path, pub_key_path=None):
+        self.ssh_thread = SSHThread(command, host, key_path)
+        self.ssh_thread.result_signal.connect(self.handle_ssh_result)
+        self.ssh_thread.start()
+
+    def run_ip_mac_thread(self, command, host, key_path):
+        self.ssh_thread = SSHThread(command, host, key_path)
+        self.ssh_thread.result_signal.connect(self.handle_ssh_result)
+        self.ssh_thread.start()
+
+    def handle_ssh_result(self, success, host, ip_address, mac_address):
+        if success:
+            if self.ssh_thread.command == "remove":
+                self.update_ssh_status(host, success=False)
+                QMessageBox.information(self, "Удаление SSH", f"Удаление SSH ключей для хоста {host} завершено.")
+            elif self.ssh_thread.command == "get_ip_mac":
+                self.update_ip_mac_in_table(host, ip_address, mac_address)
+                QMessageBox.information(self, "Получение IP и MAC", f"IP и MAC адреса для хоста {host} получены.")
+            elif self.ssh_thread.command == "setup_wol":
+                self.update_wol_status(host, success=True)
+                QMessageBox.information(self, "Настройка WoL", f"Настройка Wake on LAN для хоста {host} завершена.")
+            elif self.ssh_thread.command == "reboot":
+                QMessageBox.information(self, "Перезагрузка", f"Хост {host} перезагружается.")
+            elif self.ssh_thread.command == "shutdown":
+                QMessageBox.information(self, "Выключение", f"Хост {host} выключается.")
+        else:
+            if self.ssh_thread.command == "remove":
+                QMessageBox.warning(self, "Ошибка SSH", f"Не удалось удалить SSH ключ для хоста {host}.")
+            elif self.ssh_thread.command == "get_ip_mac":
+                QMessageBox.warning(self, "Ошибка", f"Не удалось получить IP и MAC адреса для хоста {host}.")
+            elif self.ssh_thread.command == "setup_wol":
+                QMessageBox.warning(self, "Ошибка WoL", f"Не удалось настроить Wake on LAN для хоста {host}.")
+            elif self.ssh_thread.command == "reboot":
+                QMessageBox.warning(self, "Ошибка", f"Не удалось перезагрузить хост {host}.")
+            elif self.ssh_thread.command == "shutdown":
+                QMessageBox.warning(self, "Ошибка", f"Не удалось выключить хост {host}.")
+
+        self.save_to_folder()
+
+    def update_ssh_status(self, host, success):
+        for row in range(self.hosts_table.rowCount()):
+            if self.hosts_table.item(row, 3).text() == host:
+                self.hosts_table.setItem(row, 10, QTableWidgetItem("True" if success else "False"))
+                break
+
+    def update_wol_status(self, host, success):
+        for row in range(self.hosts_table.rowCount()):
+            if self.hosts_table.item(row, 3).text() == host:
+                self.hosts_table.setItem(row, 11, QTableWidgetItem("True" if success else "False"))
+                break
+
+    def update_ip_mac_in_table(self, host, ip_address, mac_address):
+        for row in range(self.hosts_table.rowCount()):
+            if self.hosts_table.item(row, 3).text() == host:
+                self.hosts_table.setItem(row, 5, QTableWidgetItem(ip_address))
+                self.hosts_table.setItem(row, 4, QTableWidgetItem(mac_address))
+                break
+
+if __name__ == "__main__":
+    import sys
+    from PyQt5.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    window = HostSettingsWindowTab()
+    window.show()
+    sys.exit(app.exec_())

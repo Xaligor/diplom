@@ -1,16 +1,10 @@
 import os
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QTreeWidget, QTreeWidgetItem
 from PyQt5.QtCore import Qt
-from .network_management import (
-    check_ping, setup_ssh, delete_ssh, get_ip_mac_addresses, setup_wol
-)
-from .user_management import (
-    create_student, delete_student, autologin_enable_func, autologin_disable_func
-)
-from .veyon_management import (
-    install_veyon, setup_veyon, remove_veyon_keys_on_server, remove_veyon_keys_on_hosts,
-    restart_veyon_on_server, restart_veyon_on_hosts
-)
+from .network_management import check_ping, setup_ssh, delete_ssh, get_ip_mac_addresses, setup_wol
+from .power_management import wake_on_lan, reboot, shutdown
+from .user_management import *
+from .veyon_management import install_veyon, setup_veyon, remove_veyon_keys_on_server, remove_veyon_keys_on_hosts, restart_veyon_on_server, restart_veyon_on_hosts
 from .command_execution import run_root_command_on_ssh, install_programs, remove_programs
 from .restrictions_management import restrict_desktop_change, restrict_network, password_protect
 
