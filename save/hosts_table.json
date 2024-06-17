@@ -11,7 +11,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "true",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -26,7 +25,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "true",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -41,7 +39,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "true",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -56,22 +53,20 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "true",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
         "Кабинет": "500",
         "Название": "Test 500",
         "Имя хоста": "mos-xh5qkt",
-        "MAC-адрес": "",
-        "IP-адрес": "",
+        "MAC-адрес": "70:85:c2:b1:84:f4",
+        "IP-адрес": "192.168.141.84",
         "Логин ученика": "student",
         "Пароль ученика": "1501",
         "Логин админа": "teacher",
         "Пароль админа": "afdfrf1501",
-        "SSH": "",
-        "WOL": "",
-        "Veyon": "",
+        "SSH": "True",
+        "WOL": "True",
         "Remote Auth": ""
     },
     {
@@ -86,8 +81,7 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "false",
         "WOL": "false",
-        "Veyon": "false",
-        "Remote Auth": ""
+        "Remote Auth": "false"
     },
     {
         "Кабинет": "407",
@@ -101,7 +95,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -116,7 +109,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -131,7 +123,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -146,7 +137,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -161,7 +151,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -176,7 +165,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -191,7 +179,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -206,7 +193,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -221,7 +207,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -236,7 +221,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -251,7 +235,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -266,7 +249,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -281,7 +263,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -296,7 +277,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -311,7 +291,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "",
-        "Veyon": "",
         "Remote Auth": ""
     },
     {
@@ -326,7 +305,6 @@
         "Пароль админа": "afdfrf1501",
         "SSH": "True",
         "WOL": "True",
-        "Veyon": "false",
         "Remote Auth": "false"
     }
 ]

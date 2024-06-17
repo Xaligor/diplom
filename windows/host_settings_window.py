@@ -25,10 +25,10 @@ class HostSettingsWindowTab(QWidget):
         main_layout.addWidget(main_splitter)
 
         self.hosts_table = QTableWidget()
-        self.hosts_table.setColumnCount(14)
+        self.hosts_table.setColumnCount(13)
         self.hosts_table.setHorizontalHeaderLabels([
             "Выбор", "Кабинет", "Название", "Имя хоста", "MAC-адрес", "IP-адрес", "Логин ученика", "Пароль ученика",
-            "Логин админа", "Пароль админа", "SSH", "WOL", "Veyon", "Remote Auth"
+            "Логин админа", "Пароль админа", "SSH", "WOL", "Remote Auth"
         ])
         self.hosts_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 

@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from .network_management import check_ping, setup_ssh, delete_ssh, get_ip_mac_addresses, setup_wol
 from .power_management import wake_on_lan, reboot, shutdown
 from .user_management import *
-from .veyon_management import install_veyon, setup_veyon, remove_veyon_keys_on_server, remove_veyon_keys_on_hosts, restart_veyon_on_server, restart_veyon_on_hosts
+from .veyon_management import *
 from .command_execution import run_root_command_on_ssh, install_programs, remove_programs
 from .restrictions_management import restrict_desktop_change, restrict_network, password_protect
 
@@ -63,14 +63,13 @@ class LeftPanel(QWidget):
         ]
         self.create_groupbox("Пользователи", buttons)
 
+    from .veyon_management import install_veyon
+
     def create_veyon_groupbox(self):
         buttons = [
             self.create_button('Установить Veyon', lambda: install_veyon(self)),
-            self.create_button('Настроить Veyon', lambda: setup_veyon(self)),
-            self.create_button('Удалить ключи с сервера', lambda: remove_veyon_keys_on_server(self)),
-            self.create_button('Удалить ключи с хостов', lambda: remove_veyon_keys_on_hosts(self)),
-            self.create_button('Рестарт службы на сервере', lambda: restart_veyon_on_server(self)),
-            self.create_button('Рестарт службы на хостах', lambda: restart_veyon_on_hosts(self))
+            self.create_button('Применить настройки Veyon', lambda: apply_veyon_settings(self)),
+            self.create_button('Перезапустить службу Veyon', lambda: restart_veyon_service(self))
         ]
         self.create_groupbox("Veyon", buttons)
 

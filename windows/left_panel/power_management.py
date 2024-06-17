@@ -1,7 +1,32 @@
 import os
 import wakeonlan
-from PyQt5.QtCore import Qt
+import paramiko
+from PyQt5.QtCore import Qt, QRunnable, QThreadPool, pyqtSlot, pyqtSignal, QObject
 from PyQt5.QtWidgets import QMessageBox
+
+class WorkerSignals(QObject):
+    result = pyqtSignal(bool, str)
+
+class SSHWorker(QRunnable):
+    def __init__(self, command, host, key_path):
+        super().__init__()
+        self.command = command
+        self.host = host
+        self.key_path = key_path
+        self.signals = WorkerSignals()
+
+    @pyqtSlot()
+    def run(self):
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(self.host, username='root', key_filename=self.key_path)
+            stdin, stdout, stderr = ssh.exec_command(self.command)
+            ssh.close()
+            self.signals.result.emit(True, self.host)
+        except Exception as e:
+            print(f"Error: {e}")
+            self.signals.result.emit(False, self.host)
 
 def wake_on_lan(panel):
     parent = panel.parent
@@ -37,11 +62,11 @@ def reboot(panel):
         QMessageBox.information(parent, "Перезагрузка", "Нет выбранных хостов.")
         return
 
+    thread_pool = QThreadPool()
     for host in host_list:
-        try:
-            parent.run_ssh_thread("reboot", host, key_path)
-        except Exception as e:
-            QMessageBox.critical(parent, "Ошибка", f"Произошла ошибка при перезагрузке хоста {host}: {str(e)}")
+        worker = SSHWorker("reboot", host, key_path)
+        worker.signals.result.connect(lambda success, h=host: handle_result(success, h, "перезагрузке"))
+        thread_pool.start(worker)
 
 def shutdown(panel):
     parent = panel.parent
@@ -54,15 +79,21 @@ def shutdown(panel):
     host_list = []
     for row in range(parent.hosts_table.rowCount()):
         if parent.hosts_table.item(row, 0).checkState() == Qt.Checked:
-            host = parent.hosts_table.item(row, 3).text()
+            host = panel.hosts_table.item(row, 3).text()
             host_list.append(host)
 
     if not host_list:
         QMessageBox.information(parent, "Выключение", "Нет выбранных хостов.")
         return
 
+    thread_pool = QThreadPool()
     for host in host_list:
-        try:
-            parent.run_ssh_thread("shutdown", host, key_path)
-        except Exception as e:
-            QMessageBox.critical(parent, "Ошибка", f"Произошла ошибка при выключении хоста {host}: {str(e)}")
+        worker = SSHWorker("shutdown now", host, key_path)
+        worker.signals.result.connect(lambda success, h=host: handle_result(success, h, "выключении"))
+        thread_pool.start(worker)
+
+def handle_result(success, host, operation):
+    if success:
+        print(f"Команда {operation} успешно отправлена на хост {host}")
+    else:
+        print(f"Команда {operation} не была успешно отправлена на хост {host}")
